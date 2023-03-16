@@ -1,6 +1,7 @@
 package com.platzi.springboot.fundamentos;
 
 import com.platzi.springboot.fundamentos.bean.MyBean;
+import com.platzi.springboot.fundamentos.bean.MyBeanProperties;
 import com.platzi.springboot.fundamentos.bean.MyBeanWithDependency;
 import com.platzi.springboot.fundamentos.component.ComponentDependency;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,7 @@ public class FundamentosApplication implements CommandLineRunner {
 	// Let's inject another dependencies
 	private MyBean myBean;
 	private MyBeanWithDependency myBeanWithDependency;
+	private MyBeanProperties myBeanProperties;
 
 	// Here we inject the dependency by the constructor with Spring Boot, we can use @Autowired but is not mandatory
 	// If the dependency has many implementations, you have to select the implementation you want to use
@@ -24,11 +26,13 @@ public class FundamentosApplication implements CommandLineRunner {
 	public FundamentosApplication(
 			@Qualifier("componentTwoImplement") ComponentDependency componentDependency,
 			MyBean myBean,
-			MyBeanWithDependency myBeanWithDependency)
+			MyBeanWithDependency myBeanWithDependency,
+			MyBeanProperties myBeanProperties)
 	{
 		this.componentDependency = componentDependency;
 		this.myBean = myBean;
 		this.myBeanWithDependency = myBeanWithDependency;
+		this.myBeanProperties = myBeanProperties;
 	}
 
 	public static void main(String[] args) {
@@ -43,5 +47,6 @@ public class FundamentosApplication implements CommandLineRunner {
 		componentDependency.sayHello();
 		myBean.print();
 		myBeanWithDependency.printWithDependency();
+		System.out.println(myBeanProperties.showProperties());
 	}
 }
