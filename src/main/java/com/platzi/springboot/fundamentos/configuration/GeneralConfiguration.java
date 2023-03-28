@@ -5,8 +5,11 @@ import com.platzi.springboot.fundamentos.bean.MyBeanPropertiesImpl;
 import com.platzi.springboot.fundamentos.pojo.UserPojo;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import javax.sql.DataSource;
 
 @Configuration
 @EnableConfigurationProperties(UserPojo.class) // To set the UserPojo class as a representation of properties
@@ -25,5 +28,17 @@ public class GeneralConfiguration {
     @Bean
     public MyBeanProperties myBeanProperties(){
         return new MyBeanPropertiesImpl(name, lastName, random);
+    }
+
+    // We can create a bean to set the database connection, and later we can inject the dependency
+    @Bean
+    public DataSource dataSource(){
+        DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
+
+        return dataSourceBuilder.driverClassName("org.h2.Driver")
+                .url("jdbc:h2:mem:testdb")
+                .username("sa")
+                .password("")
+                .build();
     }
 }
