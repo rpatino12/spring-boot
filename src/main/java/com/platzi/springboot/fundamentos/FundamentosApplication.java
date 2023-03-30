@@ -73,6 +73,12 @@ public class FundamentosApplication implements CommandLineRunner {
 
 		userRepository.findAndSort("M", Sort.by("id").descending())
 				.forEach(user -> LOGGER.info("\n\tUser that name starts with M: " + user));
+
+		userRepository.findByName("Marisol").forEach(user -> LOGGER.info("User with query method: \n" + user));
+
+		LOGGER.info("User with query method findByEmailAndName: \n" +
+				userRepository.findByEmailAndName("marco@domain.com", "Marco").
+						orElseThrow(() -> new RuntimeException("User searched by email and name not found")));
 	}
 
 	// Let's create a method to insert data to our user table in our database
