@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.domain.Sort;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -62,6 +63,16 @@ public class FundamentosApplication implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		// firstExamples();
 		saveUsersInDatabase();
+		getInformationJpqlFromUser();
+	}
+
+	private void getInformationJpqlFromUser(){
+		LOGGER.info("\n\tUser search with findByUserEmail method: " +
+				userRepository.findByUserEmail("paola@domain.com")
+						.orElseThrow(()-> new RuntimeException("User not found with that email")));
+
+		userRepository.findAndSort("M", Sort.by("id").descending())
+				.forEach(user -> LOGGER.info("\n\tUser that name starts with M: " + user));
 	}
 
 	// Let's create a method to insert data to our user table in our database
@@ -75,8 +86,10 @@ public class FundamentosApplication implements CommandLineRunner {
 		User user7 = new User("Enrique", "enrique@domain.com", LocalDate.of(2021, 11, 12));
 		User user8 = new User("Luis", "luis@domain.com", LocalDate.of(2021, 2, 27));
 		User user9 = new User("Paola", "paola@domain.com", LocalDate.of(2021, 4, 10));
+		User user10 = new User("Manuel", "manuel@domain.com", LocalDate.of(2021, 1, 8));
+		User user11 = new User("Miguel", "miguel@domain.com", LocalDate.of(2021, 10, 3));
 
-		List<User> userList = Arrays.asList(user1, user2, user3, user4, user5, user6, user7, user8, user9);
+		List<User> userList = Arrays.asList(user1, user2, user3, user4, user5, user6, user7, user8, user9, user10, user11);
 
 		// Before using this method you have to inject the userRepository interface to the application
 		userList.stream().forEach(userRepository::save); // Here we generate all the users for our table
