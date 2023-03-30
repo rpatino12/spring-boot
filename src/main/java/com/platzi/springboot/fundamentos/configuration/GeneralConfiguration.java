@@ -8,10 +8,12 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 
 import javax.sql.DataSource;
 
 @Configuration
+@PropertySource("classpath:connection.properties") // This is to use the configuration values set in the properties file
 @EnableConfigurationProperties(UserPojo.class) // To set the UserPojo class as a representation of properties
 public class GeneralConfiguration {
     // This way we can map the properties stored in the application.properties file
@@ -23,6 +25,20 @@ public class GeneralConfiguration {
 
     @Value("${value.random}")
     private String random;
+
+    // This is just for the example, it's not a good practice to do this
+    // The best way is using environmental variables to set the database connection
+    @Value("${jdbc.url}")
+    private String jdbcUrl;
+
+    @Value("${driver}")
+    private String driver;
+
+    @Value("${username}")
+    private String username;
+
+    @Value("${password}")
+    private String password;
 
     // Now that we have the properties in attributes we need a bean to work with them
     @Bean
@@ -36,10 +52,10 @@ public class GeneralConfiguration {
     public DataSource dataSource(){
         DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
 
-        return dataSourceBuilder.driverClassName("org.h2.Driver")
-                .url("jdbc:h2:mem:testdb")
-                .username("sa")
-                .password("")
+        return dataSourceBuilder.driverClassName(driver)
+                .url(jdbcUrl)
+                .username(username)
+                .password(password)
                 .build();
     }
 }
