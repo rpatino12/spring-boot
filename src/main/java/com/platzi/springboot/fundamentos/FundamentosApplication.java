@@ -67,6 +67,7 @@ public class FundamentosApplication implements CommandLineRunner {
 	}
 
 	private void getInformationJpqlFromUser(){
+		/*
 		LOGGER.info("\n\tUser search with findByUserEmail method: " +
 				userRepository.findByUserEmail("paola@domain.com")
 						.orElseThrow(()-> new RuntimeException("User not found with that email")));
@@ -77,8 +78,26 @@ public class FundamentosApplication implements CommandLineRunner {
 		userRepository.findByName("Marisol").forEach(user -> LOGGER.info("User with query method: \n" + user));
 
 		LOGGER.info("User with query method findByEmailAndName: \n" +
-				userRepository.findByEmailAndName("marco@domain.com", "Marco").
-						orElseThrow(() -> new RuntimeException("User searched by email and name not found")));
+				userRepository.findByEmailAndName("marco@domain.com", "Marco")
+				.orElseThrow(() -> new RuntimeException("User searched by email and name not found")));
+
+		userRepository.findByNameLike("%D%").forEach(user -> LOGGER.info("\n User findByNameLike method: " + user));
+
+		userRepository.findByNameOrEmail(null, "karen@domain.com")
+				.forEach(user -> LOGGER.info("\n User findByNameOrEmail method: " + user));
+		*/
+
+		userRepository.findByBirthdateBetween(
+				LocalDate.of(2021, 3, 1),
+				LocalDate.of(2021, 6, 20))
+				.forEach(user -> LOGGER.info("\n User with date interval: " + user));
+
+		userRepository.findByNameLikeOrderByIdDesc("%M%")
+				.forEach(user -> LOGGER.info("\n\t User starts with M and ordered: " + user));
+
+		userRepository.findByNameContainingOrderByIdDesc("ar")
+				.forEach(user -> LOGGER.info("\n\t User contains 'ar' and ordered: " + user));
+
 	}
 
 	// Let's create a method to insert data to our user table in our database
@@ -94,8 +113,9 @@ public class FundamentosApplication implements CommandLineRunner {
 		User user9 = new User("Paola", "paola@domain.com", LocalDate.of(2021, 4, 10));
 		User user10 = new User("Manuel", "manuel@domain.com", LocalDate.of(2021, 1, 8));
 		User user11 = new User("Miguel", "miguel@domain.com", LocalDate.of(2021, 10, 3));
+		User user12 = new User("David", "david@domain.com", LocalDate.of(2021, 3, 3));
 
-		List<User> userList = Arrays.asList(user1, user2, user3, user4, user5, user6, user7, user8, user9, user10, user11);
+		List<User> userList = Arrays.asList(user1, user2, user3, user4, user5, user6, user7, user8, user9, user10, user11, user12);
 
 		// Before using this method you have to inject the userRepository interface to the application
 		userList.stream().forEach(userRepository::save); // Here we generate all the users for our table
