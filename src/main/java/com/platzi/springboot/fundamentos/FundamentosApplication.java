@@ -61,11 +61,11 @@ public class FundamentosApplication implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		// firstExamples();
-		saveUsersInDataBase();
+		saveUsersInDatabase();
 	}
 
 	// Let's create a method to insert data to our user table in our database
-	private void saveUsersInDataBase(){
+	private void saveUsersInDatabase(){
 		User user1 = new User("John", "john@domain.com", LocalDate.of(2021, 3, 13));
 		User user2 = new User("Marco", "marco@domain.com", LocalDate.of(2021, 12, 8));
 		User user3 = new User("Daniela", "daniela@domain.com", LocalDate.of(2021, 9, 8));
@@ -77,6 +77,8 @@ public class FundamentosApplication implements CommandLineRunner {
 		User user9 = new User("Paola", "paola@domain.com", LocalDate.of(2021, 4, 10));
 
 		List<User> userList = Arrays.asList(user1, user2, user3, user4, user5, user6, user7, user8, user9);
+
+		// Before using this method you have to inject the userRepository interface to the application
 		userList.stream().forEach(userRepository::save); // Here we generate all the users for our table
 	}
 

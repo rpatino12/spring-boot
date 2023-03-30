@@ -30,7 +30,8 @@ public class GeneralConfiguration {
         return new MyBeanPropertiesImpl(name, lastName, random);
     }
 
-    // We can create a bean to set the database connection, and later we can inject the dependency
+    // We can create a bean to set the database connection and inject the dependency
+    // Note: If you want to see the database console using h2-console (go to http://localhost:8081/app/h2-console/)
     @Bean
     public DataSource dataSource(){
         DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
