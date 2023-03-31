@@ -98,6 +98,12 @@ public class FundamentosApplication implements CommandLineRunner {
 		userRepository.findByNameContainingOrderByIdDesc("ar")
 				.forEach(user -> LOGGER.info("\n\t User contains 'ar' and ordered: " + user));
 
+		userRepository.findByNameContainingAndBirthdateBetween(
+				"i",
+				LocalDate.of(2020, 3, 1),
+				LocalDate.of(2021,9, 20))
+				.forEach(user -> LOGGER.info("\n\t User contains 'i' and Birthdate between: " + user));
+
 	}
 
 	// Let's create a method to insert data to our user table in our database
@@ -110,7 +116,7 @@ public class FundamentosApplication implements CommandLineRunner {
 		User user6 = new User("Carlos", "carlos@domain.com", LocalDate.of(2021, 7, 7));
 		User user7 = new User("Enrique", "enrique@domain.com", LocalDate.of(2021, 11, 12));
 		User user8 = new User("Luis", "luis@domain.com", LocalDate.of(2021, 2, 27));
-		User user9 = new User("Paola", "paola@domain.com", LocalDate.of(2021, 4, 10));
+		User user9 = new User("Laura", "laura@domain.com", LocalDate.of(2021, 4, 10));
 		User user10 = new User("Manuel", "manuel@domain.com", LocalDate.of(2021, 1, 8));
 		User user11 = new User("Miguel", "miguel@domain.com", LocalDate.of(2021, 10, 3));
 		User user12 = new User("David", "david@domain.com", LocalDate.of(2021, 3, 3));
