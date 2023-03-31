@@ -7,13 +7,13 @@ import com.platzi.springboot.fundamentos.component.ComponentDependency;
 import com.platzi.springboot.fundamentos.entity.User;
 import com.platzi.springboot.fundamentos.pojo.UserPojo;
 import com.platzi.springboot.fundamentos.repository.UserRepository;
+import com.platzi.springboot.fundamentos.service.UserService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.data.domain.Sort;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -33,6 +33,7 @@ public class FundamentosApplication implements CommandLineRunner {
 	private MyBeanProperties myBeanProperties;
 	private UserPojo userPojo;
 	private UserRepository userRepository;
+	private UserService userService;
 
 	// Here we inject the dependency by the constructor with Spring Boot, we can use @Autowired but is not mandatory
 	// If the dependency has many implementations, you have to select the implementation you want to use
@@ -43,7 +44,7 @@ public class FundamentosApplication implements CommandLineRunner {
 			MyBeanWithDependency myBeanWithDependency,
 			MyBeanProperties myBeanProperties,
 			UserPojo userPojo,
-			UserRepository userRepository)
+			UserRepository userRepository, UserService userService)
 	{
 		this.componentDependency = componentDependency;
 		this.myBean = myBean;
@@ -51,6 +52,7 @@ public class FundamentosApplication implements CommandLineRunner {
 		this.myBeanProperties = myBeanProperties;
 		this.userPojo = userPojo;
 		this.userRepository = userRepository;
+		this.userService = userService;
 	}
 
 	public static void main(String[] args) {
@@ -64,6 +66,22 @@ public class FundamentosApplication implements CommandLineRunner {
 		// firstExamples();
 		saveUsersInDatabase();
 		getInformationJpqlFromUser();
+		saveWithErrorTransactional();
+	}
+
+	// Let's use the service layer with this method
+	// Inside this method we are executing an insert transaction
+	private void saveWithErrorTransactional(){
+		User test1 = new User("TestTransactional1", "TestTransactional1@domain.com", LocalDate.now());
+		User test2 = new User("TestTransactional2", "TestTransactional2@domain.com", LocalDate.now());
+		User test3 = new User("TestTransactional3", "TestTransactional3@domain.com", LocalDate.now());
+		User test4 = new User("TestTransactional4", "TestTransactional4@domain.com", LocalDate.now());
+
+		List<User> users = Arrays.asList(test1, test2, test3, test4);
+
+		userService.saveTransactional(users);
+
+		userService.getAllUsers().forEach(user -> LOGGER.info("\n\tThis is the transactional user: \n\t" + user));
 	}
 
 	private void getInformationJpqlFromUser(){
