@@ -104,6 +104,12 @@ public class FundamentosApplication implements CommandLineRunner {
 				LocalDate.of(2021,9, 20))
 				.forEach(user -> LOGGER.info("\n\t User contains 'i' and Birthdate between: " + user));
 
+		LOGGER.info("\n\t Query using JPQL and named parameters: " +
+				userRepository.getAllByBirthdateAndEmail(
+						LocalDate.of(2021, 11, 12),
+						"enrique@domain.com")
+						.orElseThrow(() -> new RuntimeException("User not found by named parameter")));
+
 	}
 
 	// Let's create a method to insert data to our user table in our database

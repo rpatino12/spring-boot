@@ -1,9 +1,11 @@
 package com.platzi.springboot.fundamentos.repository;
 
+import com.platzi.springboot.fundamentos.dto.UserDto;
 import com.platzi.springboot.fundamentos.entity.User;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
@@ -30,4 +32,10 @@ public interface UserRepository extends JpaRepository<User, Long> {
     List<User> findByNameLikeOrderByIdDesc(String name);
     List<User> findByNameContainingOrderByIdDesc(String name);
     List<User> findByNameContainingAndBirthdateBetween(String name, LocalDate startDate, LocalDate endDate);
+
+    // Use of JPQL with named parameters (using @Param)
+    @Query("SELECT new com.platzi.springboot.fundamentos.dto.UserDto(u.id, u.name, u.birthdate)" +
+            " FROM User u WHERE u.birthdate=:dateParameter AND u.email=:emailParameter")
+    Optional<UserDto> getAllByBirthdateAndEmail(@Param("dateParameter") LocalDate date,
+                                                @Param("emailParameter") String email);
 }
